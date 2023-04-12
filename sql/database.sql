@@ -78,7 +78,7 @@ CREATE TABLE ProductMaterial (
 CREATE TABLE ProductSize (
     ProductID INT,
     SizeID INT,
-    Units VARCHAR(50),
+    Units INT,
     FOREIGN KEY (ProductID) REFERENCES Products(ProductID),
     FOREIGN KEY (SizeID) REFERENCES Sizes(SizeID),
     PRIMARY KEY (ProductID, SizeID),

@@ -4,7 +4,7 @@ Parts:
 
 - [x] Create bd which represent tableware business (instagram store rather than
     something bigger)
-- [ ] Seed bd
+- [x] Seed bd (⚠️  needs additinal review  nand some manual mmodifications)
 - [ ] Migrate bd into cloud
 - [ ] Write SQL to suppor business logic
 - [ ] Create server for accessing bd

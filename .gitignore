@@ -1,0 +1,31 @@
+# Byte-compiled / optimized / DLL files
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Distribution / packaging
+dist/
+build/
+*.egg-info/
+
+# Testing
+*.pytest_cache/
+*.coverage
+.coverage.*
+htmlcov/
+
+# IDEs / editors
+.vscode/
+.idea/
+*.suo
+*.ntvs*
+
+# Temp files
+*.tmp
+*.bak
+*.swp
+*.~*
+
+# Other
+.DS_Store
+Thumbs.db
