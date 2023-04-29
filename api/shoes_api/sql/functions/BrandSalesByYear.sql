@@ -5,11 +5,11 @@ RETURNS TABLE
 AS
 RETURN
     SELECT
-        b.BrandID,
+        b.BrandName,
         SUM(od.Quantity) AS NumberOfPairsSold
     FROM Orders o
     JOIN OrderDetails od ON o.OrderID = od.OrderID
     JOIN Products p ON od.ProductID = p.ProductID
     JOIN Brands b ON p.BrandID = b.BrandID
     WHERE YEAR(o.CreateDate) = @Year
-    GROUP BY b.BrandID;
+    GROUP BY b.BrandName;

@@ -1,10 +1,12 @@
 --Витрати за місяць, за 3 місяці, за рік:
 -- For month
-CREATE FUNCTION GetCostsByMonth(@Month INT, @Year INT)
+CREATE FUNCTION GetCostsByMonth(@Year INT)
 RETURNS TABLE
 AS
 RETURN
-    SELECT 
+    SELECT
+        MONTH(s.DateOfDelivery) AS Month,
         SUM(s.TotalSum) AS Costs
     FROM Supplies s
-    WHERE MONTH(s.DateOfDelivery) = @Month AND YEAR(s.DateOfDelivery) = @Year;
+    WHERE YEAR(s.DateOfDelivery) = @Year
+    GROUP BY MONTH(s.DateOfDelivery);

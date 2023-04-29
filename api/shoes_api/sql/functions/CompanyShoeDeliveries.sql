@@ -3,9 +3,9 @@ CREATE FUNCTION GetCompanyShoeDeliveries()
 RETURNS TABLE
 AS
 RETURN
-    SELECT 
-        sc.SupplierCompanyID, 
+    SELECT
+        sc.CompanyName,
         SUM(sp.Units) AS NumberOfPairs
     FROM Supplies sp
     JOIN SupplierCompany sc ON sp.SupplierCompanyID = sc.SupplierCompanyID
-    GROUP BY sc.SupplierCompanyID;
+    GROUP BY sc.CompanyName;
