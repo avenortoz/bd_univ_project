@@ -6,7 +6,7 @@ import base64
 import os
 
 import datetime
-from typing import List, Iterator
+from typing import List, Iterator, Union, Optional
 
 
 class FirstnameGenerator:
@@ -53,7 +53,7 @@ class ChoiceGenerator:
 
 
 class ChoiceGeneratorInteger:
-    def __init__(self, choices: List[int | float]):
+    def __init__(self, choices: List[Union[int, float]]):
         self.choices = choices
 
     def __iter__(self):
@@ -65,7 +65,7 @@ class ChoiceGeneratorInteger:
 
 class EmailGenerator:
     def __init__(
-        self, mailservers: List[str] | None = None, domains: List[str] | None = None
+        self, mailservers: Optional[List[str]] = None, domains: Optional[List[str]] = None
     ):
         self.mailservers = mailservers or ["gmail"]
         self.domains = domains or ["com"]

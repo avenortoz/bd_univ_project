@@ -162,7 +162,7 @@ def generate_data(table_name):
         }
         generators = [
             AutoIncermentGenerator(),
-            (str(key) for key in dimensions for _ in range(len(sizes[key]))),
+            ("'"+str(key)+"'" for key in dimensions for _ in range(len(sizes[key]))),
             (str(i) for i in sum(sizes.values(), [])),
             DateGenerator(start_date, end_date),
             DateGenerator(start_date, end_date),
@@ -207,13 +207,14 @@ def generate_data(table_name):
             FirstnameGenerator(),
             ProductStaticIDGenerator(),
             IntegerNumberGenerator(start=1, end=100),  # ProductsPriceHistoryID
+            FirstnameGenerator(),
             DateGenerator(start_date, end_date),
             DateGenerator(start_date, end_date),
         ]
     elif table_name == "ProductMaterial":
         generators = [
-            IntegerNumberGenerator(start=1, end=500),  # ProductID
-            IntegerNumberGenerator(start=1, end=100),  # MaterialID
+            IntegerNumberGenerator(start=1, end=200),  # ProductID
+            IntegerNumberGenerator(start=1, end=7),  # MaterialID
             PercentageGenerator(),
             DateGenerator(start_date, end_date),
             DateGenerator(start_date, end_date),
@@ -221,7 +222,7 @@ def generate_data(table_name):
     elif table_name == "ProductSize":
         generators = [
             IntegerNumberGenerator(start=1, end=500),  # ProductID
-            IntegerNumberGenerator(start=1, end=100),  # SizeID
+            IntegerNumberGenerator(start=1, end=56),  # SizeID
             IntegerNumberGenerator(start=5, end=50),
             DateGenerator(start_date, end_date),
             DateGenerator(start_date, end_date),
@@ -274,7 +275,11 @@ def generate_data(table_name):
             IntegerNumberGenerator(start=1, end=100),  # CustomerID
             FloatNumberGenerator(start=1.0, end=10000.0, precision=1),
             FloatNumberGenerator(start=1.0, end=10000.0, precision=1),
-            IntegerNumberGenerator(start=1, end=100),  # DiscountCardID
+            IntegerNumberGenerator(start=1, end=100)  # DiscountCardID
+        ,
+        DateGenerator(start_date, end_date),
+        DateGenerator(start_date, end_date),
+
         ]
     elif table_name == "OrderDetails":
         generators = [
@@ -283,6 +288,8 @@ def generate_data(table_name):
             IntegerNumberGenerator(start=1, end=500),  # ProductID
             IntegerNumberGenerator(start=1, end=100),
             FloatNumberGenerator(start=1.0, end=10000.0, precision=1),
+        DateGenerator(start_date, end_date),
+        DateGenerator(start_date, end_date)
         ]
     elif table_name == "Supplies":
         generators = [
