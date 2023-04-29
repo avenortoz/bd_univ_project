@@ -24,20 +24,10 @@ def readFunctionFromFile(nameFile):
 
 def dropFunctionsInDB():
    return readFunctionFromFile('sql/drop.sql')
+def createFunctionsInDB():
+   return readFunctionFromFile('sql/functions/function.sql')
 def insertValuesInDB():
    return readFunctionFromFile('sql/fill.sql')
-def get_db_connection():
-   server = 'thesoleplate.ccxpddhrdedh.us-east-1.rds.amazonaws.com'
-   database = 'thesoleplate'
-   driver = 'ODBC Driver 17 for SQL Server'
-
-   username = "tsp"
-   password = "12345678"
-   connection_string = f"DRIVER={driver};SERVER={server};DATABASE={database};UID={username};PWD={password}"
-
-   cnxn = pyodbc.connect(connection_string)
-   cursor = cnxn.cursor()
-   return cnxn, cursor
 
 
 
@@ -718,7 +708,16 @@ if __name__ == '__main__':
                print("An error occurred:", e)
                connection.rollback()
    connection.commit()
-   createAllFunctions(cursor)
+   for statement in createFunctionsInDB().split(';'):
+       if statement.strip():
+           try:
+               cursor.execute(statement)
+               connection.commit()
+           except Exception as e:
+               print("An error occurred:", e)
+               connection.rollback()
+
+   # createAllFunctions(cursor)
    connection.commit()
    connection.close()
 
