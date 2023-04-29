@@ -1,23 +1,10 @@
-from flask import Flask
+from flask import Flask, jsonify
 import pyodbc
 
 
 app = Flask(__name__)
 
 
-
-# def get_db_connection():
-   # server = 'thesoleplate.ccxpddhrdedh.us-east-1.rds.amazonaws.com'
-   # database = 'thesoleplate'
-   # driver = 'ODBC Driver 17 for SQL Server'
-   #
-   # username = "tsp"
-   # password = "12345678a-"
-   # connection_string = f"DRIVER={driver};SERVER={server};DATABASE={database};UID={username};PWD={password}"
-   #
-   # cnxn = pyodbc.connect(connection_string)
-   # cursor = cnxn.cursor()
-   # return cnxn, cursor
 
 
 def get_db_connection():
@@ -87,16 +74,12 @@ def createAllFunctions(cursor):
 
 def readFunctionFromFile(nameFile):
    file_path = nameFile
-
-
    with open(file_path, 'rb') as file:
        content = file.read()
    if content.startswith(b'\xef\xbb\xbf'):
        content = content[3:]
    with open(file_path, 'wb') as file:
        file.write(content)
-
-
    with open(file_path, 'r', encoding='utf-8') as file:
        file_contents = file.read()
    return file_contents
@@ -109,13 +92,14 @@ def insertValuesInDB():
 @app.route("/avgppb")
 def GetAverageProductPriceByBrand():
    connection, cursor = get_db_connection()
-   cursor.execute("SELECT * FROM GetAverageProductPriceByBrand ()")
+   cursor.execute("SELECT * FROM GetAverageProductPriceByBrand()")
    rows = cursor.fetchall()
-   result = "РЕЗУЛЬТАТ: \n"
-   for row in rows:
-       result += ', '.join(map(str, row)) + '\n'
+   result = {}
+   for row in cursor.description:
+      column_name = row[0]
+      result[column_name] = row[1]
    connection.close()
-   return result
+   return jsonify(result)
 
 
 @app.route("/bsb3/<int:brand_id>/<int:start_month>/<int:year>")
@@ -123,9 +107,11 @@ def GetBrandSalesBy3Months(brand_id, start_month, year):
    connection, cursor = get_db_connection()
    cursor.execute("SELECT * FROM GetBrandSalesBy3Months (?,?,?)", (brand_id, start_month, year))
    rows = cursor.fetchall()
-   result = "РЕЗУЛЬТАТ: \n"
+   result = "\n{"
    for row in rows:
-       result += ', '.join(map(str, row)) + '\n'
+      result += ': '.join(map(str, row)) + ',\n'
+   result += "}\n"
+   print(result)
    connection.close()
    return result
 
@@ -142,17 +128,22 @@ def GetBrandSalesByMonth(brand_id, start_month, year):
    return result
 
 
-@app.route("/bsby/<int:brand_id>/<int:year>")
-def GetBrandSalesByYear(brand_id, year):
-   connection, cursor = get_db_connection()
-   cursor.execute("SELECT * FROM GetBrandSalesByYear(?,?)", (brand_id, year))
-   rows = cursor.fetchall()
-   result = "РЕЗУЛЬТАТ: \n"
-   for row in rows:
-       result += ', '.join(map(str, row)) + '\n'
-   connection.close()
-   return result
 
+
+#=========================================================================================================================
+@app.route("/bsby/<int:year>")
+def GetBrandsSalesByYear(year):
+   connection, cursor = get_db_connection()
+   cursor.execute("SELECT * FROM GetBrandsSalesByYear(?)", (year,))
+   rows = cursor.fetchall()
+   result = []
+   column_names = [column_name[0] for column_name in cursor.description]
+   for row in rows:
+      result.append({column_names[i]: value for i, value in enumerate(row)})
+   connection.close()
+   return jsonify(result)
+
+#=======================================================================================================================
 
 @app.route("/sdby/")
 def GetCompanyShoeDeliveries():
@@ -167,7 +158,7 @@ def GetCompanyShoeDeliveries():
 
 
 
-
+#
 @app.route("/cb3/<int:month_id>/<int:year>")
 def GetCostsBy3Months(month_id, year):
    connection, cursor = get_db_connection()
@@ -177,6 +168,7 @@ def GetCostsBy3Months(month_id, year):
    for row in rows:
        result += ', '.join(map(str, row)) + '\n'
    connection.close()
+   #
    return result
 
 
@@ -636,29 +628,29 @@ def GetTotalProductsInStock():
 if __name__ == '__main__':
    connection, cursor = get_db_connection()
 
-   for statement in generateDB().split(';'):
-       if statement.strip():
-           try:
-               cursor.execute(statement)
-               connection.commit()
-           except Exception as e:
-               print("An error occurred:", e)
-               connection.rollback()
-   connection.commit()
-
-
-
-
-
-   for statement in insertValuesInDB().split(';'):
-       if statement.strip():
-           try:
-               cursor.execute(statement)
-               connection.commit()
-           except Exception as e:
-               print("An error occurred:", e)
-               connection.rollback()
-   connection.commit()
+   # for statement in generateDB().split(';'):
+   #     if statement.strip():
+   #         try:
+   #             cursor.execute(statement)
+   #             connection.commit()
+   #         except Exception as e:
+   #             print("An error occurred:", e)
+   #             connection.rollback()
+   # connection.commit()
+   #
+   #
+   #
+   #
+   #
+   # for statement in insertValuesInDB().split(';'):
+   #     if statement.strip():
+   #         try:
+   #             cursor.execute(statement)
+   #             connection.commit()
+   #         except Exception as e:
+   #             print("An error occurred:", e)
+   #             connection.rollback()
+   # connection.commit()
    # createAllFunctions(cursor)
    # connection.commit()
    connection.close()
