@@ -33,13 +33,42 @@ class NameGenerator:
         return "'" + names.get_full_name() + "'"
 
 
+class ProductGenerator:
+    def __iter__(self):
+        return self
+
+    def __next__(self):
+        return "'" + names.get_full_name() + "'"
+
+
+class CategoryGenerator:
+    def __iter__(self):
+        return self
+
+    def __next__(self):
+        return "'" + names.get_full_name() + "'"
+
+
 class NullGenerator:
     def __iter__(self):
         return self
 
     def __next__(self):
         return "NULL"
+class BrandGenerator:
+    def __init__(self, choices: List[str]):
+        self.choices = choices
 
+    def __iter__(self):
+        return self
+
+    def __next__(self):
+        if self.choices:
+            value = random.choice(self.choices)  # Choose a random brand from the choices
+            self.choices.remove(value)  # Remove the chosen brand from the choices list
+            return "'" + value + "'"
+        else:
+            raise StopIteration
 
 class ChoiceGenerator:
     def __init__(self, choices: List[str]):
@@ -65,7 +94,7 @@ class ChoiceGeneratorInteger:
 
 class EmailGenerator:
     def __init__(
-        self, mailservers: Optional[List[str]] = None, domains: Optional[List[str]] = None
+            self, mailservers: Optional[List[str]] = None, domains: Optional[List[str]] = None
     ):
         self.mailservers = mailservers or ["gmail"]
         self.domains = domains or ["com"]
@@ -77,13 +106,13 @@ class EmailGenerator:
         # TODO: make email look meaningful
         size = random.randint(10, 20)
         return (
-            "'"
-            + (
-                f"{''.join(random.choices(string.ascii_letters, k=size))}"
-                f"@{random.choices(self.mailservers)[0]}"
-                f".{random.choices(self.domains)[0]}"
-            )
-            + "'"
+                "'"
+                + (
+                    f"{''.join(random.choices(string.ascii_letters, k=size))}"
+                    f"@{random.choices(self.mailservers)[0]}"
+                    f".{random.choices(self.domains)[0]}"
+                )
+                + "'"
         )
 
 
@@ -111,11 +140,11 @@ class DateGenerator:
     def __next__(self):
         offset = random.randint(0, int(self.range.total_seconds() * 1000))
         return (
-            "'"
-            + (self.start + datetime.timedelta(milliseconds=offset)).strftime(
-                "%Y-%m-%d %H:%M:%S"
-            )
-            + "'"
+                "'"
+                + (self.start + datetime.timedelta(milliseconds=offset)).strftime(
+            "%Y-%m-%d %H:%M:%S"
+        )
+                + "'"
         )
 
 
@@ -208,7 +237,6 @@ def insert_into_table(name: str, generators: List[Iterator[str]], n: int = 10):
         res += tmp
     res += ";"
     return res
-
 
 # Example:
 # gens = [

@@ -30,20 +30,6 @@ def insertValuesInDB():
    return readFunctionFromFile('sql/fill.sql')
 
 
-def get_db_connection():
-   server = '***'
-   database = '*******'
-   driver = 'ODBC Driver 17 for SQL Server'
-
-   username = "***"
-   password = "**********"
-   connection_string = f"DRIVER={driver};SERVER={server};DATABASE={database};UID={username};PWD={password}"
-
-   cnxn = pyodbc.connect(connection_string)
-   cursor = cnxn.cursor()
-   return cnxn, cursor
-
-
 
 
 def generateDB():
@@ -249,6 +235,18 @@ def get_top_5_popular_products():
 if __name__ == '__main__':
    connection, cursor = get_db_connection()
 
+
+
+   # for statement in dropFunctionsInDB().split(';'):
+   #     if statement.strip():
+   #         try:
+   #             cursor.execute(statement)
+   #             connection.commit()
+   #         except Exception as e:
+   #             print("An error occurred:", e)
+   #             connection.rollback()
+   # connection.commit()
+
    # for statement in generateDB().split(';'):
    #     if statement.strip():
    #         try:
@@ -272,17 +270,6 @@ if __name__ == '__main__':
    #             print("An error occurred:", e)
    #             connection.rollback()
    # connection.commit()
-
-   for statement in dropFunctionsInDB().split(';'):
-       if statement.strip():
-           try:
-               cursor.execute(statement)
-               connection.commit()
-           except Exception as e:
-               print("An error occurred:", e)
-               connection.rollback()
-   connection.commit()
-
    for statement in createFunctionsInDB().split(';'):
        if statement.strip():
            try:
@@ -291,7 +278,7 @@ if __name__ == '__main__':
            except Exception as e:
                print("An error occurred:", e)
                connection.rollback()
-   connection.commit()
+   # connection.commit()
    connection.close()
 
 
