@@ -20,6 +20,7 @@ DROP FUNCTION GetAverageProductPriceByBrand;
 DROP FUNCTION GetBrandSalesByPartOfYear;
 DROP FUNCTION GetBrandSalesByMonth;
 DROP FUNCTION GetBrandsSalesByYear;
+DROP FUNCTION GetEmployeeOrdersByMonthInYear;
 DROP FUNCTION GetCompanyShoeDeliveries;
 DROP FUNCTION GetCostsByPartOfYear;
 DROP FUNCTION GetCostsByMonth;

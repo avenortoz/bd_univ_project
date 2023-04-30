@@ -39,7 +39,7 @@ end_date = datetime.datetime(year=2023, month=1, day=1)
 tables = [
     ("DiscountCards", 100),
     ("Brands", 50),
-    ("Materials", 7),
+    ("Materials", 50),
     ("Sizes", 56),
     ("Customers", 100),
     ("ProductsPriceHistory", 100),
@@ -87,15 +87,13 @@ def generate_data(table_name):
         generators = [
             AutoIncermentGenerator(),
             ChoiceGenerator(
-                [
-                    "Canvas",
-                    "Leather",
-                    "Mesh",
-                    "Rubber",
-                    "Rubber sole",
-                    "Synthetic sole",
-                    "Textile",
-                ]
+                ["Leather", "Suede", "Canvas", "Mesh", "Knit", "Synthetic", "Nubuck", "Patent Leather", "Rubber",
+                 "Cork", "Denim", "Linen", "Wool", "Velvet", "Faux Fur", "Shearling", "Neoprene", "EVA Foam", "Latex",
+                 "PVC", "Microfiber", "Silk", "Satin", "Gore-Tex", "Kevlar", "Nylon", "Polyester", "Acrylic",
+                 "Polyurethane", "Spandex", "Mesh Nylon", "Knit Mesh", "Cotton", "Bamboo", "Hemp", "Jute", "Lycra",
+                 "Rayon", "Elastane", "Ramie", "Sisal", "Felt", "Foam Rubber", "Fleece", "Chenille", "Jacquard",
+                 "Tweed", "Flannel", "Corduroy", "Twill"]
+
             ),
             DateGenerator(start_date, end_date),
             DateGenerator(start_date, end_date),
@@ -202,7 +200,7 @@ def generate_data(table_name):
                  "Loafer", "Oxford", "Boot", "Chelsea", "Ankle", "Moccasin", "Wedge", "Platform", "Sandals",
                  "Flip Flops", "Espadrilles"]
             ),
-            IntegerNumberGenerator(start=1, end=100),  # BrandID
+            IntegerNumberGenerator(start=1, end=50),  # BrandID
             ChoiceGenerator(["male", "female"]),
             IntegerNumberGenerator(start=1, end=100),
             ChoiceGenerator(
@@ -244,7 +242,7 @@ def generate_data(table_name):
     elif table_name == "ProductMaterial":
         generators = [
             IntegerNumberGenerator(start=1, end=200),  # ProductID
-            IntegerNumberGenerator(start=1, end=7),  # MaterialID
+            IntegerNumberGenerator(start=1, end=50),  # MaterialID
             PercentageGenerator(),
             DateGenerator(start_date, end_date),
             DateGenerator(start_date, end_date),
@@ -294,7 +292,7 @@ def generate_data(table_name):
     elif table_name == "SupplierCompanyBrands":
         generators = [
             IntegerNumberGenerator(start=1, end=100),  # SupplierCompanyID
-            IntegerNumberGenerator(start=1, end=100),  # BrandID
+            IntegerNumberGenerator(start=1, end=50),  # BrandID
             DateGenerator(start_date, end_date),
             DateGenerator(start_date, end_date),
         ]
