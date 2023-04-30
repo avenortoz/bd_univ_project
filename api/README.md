@@ -8,6 +8,7 @@ flask run
 
 ### Docker
 ```
+cd api
 docker build -t shoes_api .
-docker run -p 5000:5000 shoes_api
+docker run -v ./shoes_api:/app/shoes_api --network host -d shoes_api
 ```
