@@ -13,6 +13,7 @@ from util.mygenerators import (
     PhoneGenerator,
     StaticNumberGenerator,
     insert_into_table,
+BrandGenerator
 )
 
 
@@ -37,8 +38,8 @@ end_date = datetime.datetime(year=2023, month=1, day=1)
 
 tables = [
     ("DiscountCards", 100),
-    ("Brands", 100),
-    ("Materials", 7),
+    ("Brands", 50),
+    ("Materials", 50),
     ("Sizes", 56),
     ("Customers", 100),
     ("ProductsPriceHistory", 100),
@@ -68,8 +69,14 @@ def generate_data(table_name):
     elif table_name == "Brands":
         generators = [
             AutoIncermentGenerator(),
-            ChoiceGenerator(
-                ["Nike", "Adidas", "Puma", "Reebok", "Under Armour", "New Balance"]
+            BrandGenerator(
+                ["Nike", "Adidas", "Puma", "Reebok", "New Balance", "Vans", "Converse", "Under Armour", "Skechers",
+                 "ASICS", "Fila", "Salomon", "Timberland", "Lacoste", "Brooks", "Merrell", "DC Shoes", "Birkenstock",
+                 "UGG", "Crocs", "Clarks", "Dr. Martens", "Havaianas", "Burberry", "Gucci", "Prada", "Louis Vuitton",
+                 "Fendi", "Versace", "Balenciaga", "Chanel", "Hermes", "Givenchy", "Valentino", "Dior", "Yeezy",
+                 "Supreme", "Off-White", "Balmain", "Tom Ford", "Alexander McQueen", "Saint Laurent", "Bottega Veneta",
+                 "Miu Miu", "Jimmy Choo", "Stella McCartney", "Christian Louboutin", "Ralph Lauren", "Calvin Klein",
+                 "Michael Kors", "Hugo Boss", "Guess"]
             ),
             EmailGenerator(),
             LastnameGenerator(),
@@ -80,15 +87,13 @@ def generate_data(table_name):
         generators = [
             AutoIncermentGenerator(),
             ChoiceGenerator(
-                [
-                    "Canvas",
-                    "Leather",
-                    "Mesh",
-                    "Rubber",
-                    "Rubber sole",
-                    "Synthetic sole",
-                    "Textile",
-                ]
+                ["Leather", "Suede", "Canvas", "Mesh", "Knit", "Synthetic", "Nubuck", "Patent Leather", "Rubber",
+                 "Cork", "Denim", "Linen", "Wool", "Velvet", "Faux Fur", "Shearling", "Neoprene", "EVA Foam", "Latex",
+                 "PVC", "Microfiber", "Silk", "Satin", "Gore-Tex", "Kevlar", "Nylon", "Polyester", "Acrylic",
+                 "Polyurethane", "Spandex", "Mesh Nylon", "Knit Mesh", "Cotton", "Bamboo", "Hemp", "Jute", "Lycra",
+                 "Rayon", "Elastane", "Ramie", "Sisal", "Felt", "Foam Rubber", "Fleece", "Chenille", "Jacquard",
+                 "Tweed", "Flannel", "Corduroy", "Twill"]
+
             ),
             DateGenerator(start_date, end_date),
             DateGenerator(start_date, end_date),
@@ -190,10 +195,14 @@ def generate_data(table_name):
     elif table_name == "Products":
         generators = [
             AutoIncermentGenerator(),
-            FirstnameGenerator(),
-            IntegerNumberGenerator(start=1, end=100),  # BrandID
+            ChoiceGenerator(
+                ["Classic", "Sneaker", "Runner", "Sporty", "Casual", "Vintage", "High-top", "Low-top", "Slip-on",
+                 "Loafer", "Oxford", "Boot", "Chelsea", "Ankle", "Moccasin", "Wedge", "Platform", "Sandals",
+                 "Flip Flops", "Espadrilles"]
+            ),
+            IntegerNumberGenerator(start=1, end=50),  # BrandID
             ChoiceGenerator(["male", "female"]),
-            FirstnameGenerator(),  # TODO: What does it mean(see table Products ProductSize)
+            IntegerNumberGenerator(start=1, end=100),
             ChoiceGenerator(
                 [
                     "red", "orange", "yellow",
@@ -204,17 +213,36 @@ def generate_data(table_name):
                 ]
             ),
             FloatNumberGenerator(start=25.0, end=1000.0, precision=1),
-            FirstnameGenerator(),
+            ChoiceGenerator(
+                ["Comfortable", "Stylish", "Versatile", "Durable", "Fashionable", "Elegant", "Sleek", "Sporty",
+                 "Classic", "Trendy", "Cozy", "Chic", "Modern", "Sophisticated", "Casual", "Premium", "Vintage",
+                 "Contemporary", "Unique", "Refined", "Timeless", "Functional", "Luxurious", "Innovative",
+                 "Flexible", "Breathable", "Lightweight", "Cushioned", "Supportive", "Waterproof", "Glamorous",
+                 "Bold", "Exquisite", "Handcrafted", "High-quality", "Distinctive", "Adaptable", "Practical",
+                 "Gentle", "Vibrant", "Statement-making", "Eco-friendly", "Traction", "Padded", "Polished",
+                 "Weather-resistant", "Versatile", "Performance-driven", "Sustainable", "Sleek"]),
             ProductStaticIDGenerator(),
             IntegerNumberGenerator(start=1, end=100),  # ProductsPriceHistoryID
-            FirstnameGenerator(),
+            ChoiceGenerator(["Athletic", "Casual", "Formal", "Sneakers", "Boots", "Sandals", "Slippers", "Loafers",
+                             "Flats",
+                             "Pumps", "Espadrilles", "Oxfords", "Mules", "Wedges", "Platforms", "Heels",
+                             "Running Shoes",
+                             "Training Shoes", "Hiking Shoes", "Dress Shoes", "Moccasins", "Slingbacks", "Clogs",
+                             "Booties",
+                             "Brogues", "Derby", "Monkstraps", "Chelsea Boots", "Chukka Boots", "Ankle Boots",
+                             "Lace-up Boots",
+                             "Peep Toe", "Mary Janes", "Gladiator Sandals", "Flip Flops", "Slides", "Wingtip",
+                             "Tassel Loafers",
+                             "Driving Shoes", "Boat Shoes", "Saddle Shoes", "Rain Boots", "Winter Boots", "Chelseas",
+                             "Cowboy Boots", "Penny Loafers", "High Tops", "Low Tops", "Spectator Shoes", "Ski Boots"]),
+
             DateGenerator(start_date, end_date),
             DateGenerator(start_date, end_date),
-        ]
+          ]
     elif table_name == "ProductMaterial":
         generators = [
             IntegerNumberGenerator(start=1, end=200),  # ProductID
-            IntegerNumberGenerator(start=1, end=7),  # MaterialID
+            IntegerNumberGenerator(start=1, end=50),  # MaterialID
             PercentageGenerator(),
             DateGenerator(start_date, end_date),
             DateGenerator(start_date, end_date),
@@ -264,7 +292,7 @@ def generate_data(table_name):
     elif table_name == "SupplierCompanyBrands":
         generators = [
             IntegerNumberGenerator(start=1, end=100),  # SupplierCompanyID
-            IntegerNumberGenerator(start=1, end=100),  # BrandID
+            IntegerNumberGenerator(start=1, end=50),  # BrandID
             DateGenerator(start_date, end_date),
             DateGenerator(start_date, end_date),
         ]

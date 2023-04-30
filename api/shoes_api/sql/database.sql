@@ -75,6 +75,15 @@ CREATE TABLE ProductMaterial (
     CreateDate DATE DEFAULT GETDATE(),
     UpdateDate DATE DEFAULT GETDATE()
 );
+CREATE TABLE StatisticsValues (
+    StatisticsID INT PRIMARY KEY,
+    Sex VARCHAR(50),
+    Brand  VARCHAR(100),
+    Category VARCHAR(250),
+    Price MONEY,
+    CreateDate DATE DEFAULT GETDATE(),
+    UpdateDate DATE DEFAULT GETDATE()
+);
 
 CREATE TABLE ProductSize (
     ProductID INT,

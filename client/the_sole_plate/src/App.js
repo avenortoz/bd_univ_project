@@ -7,6 +7,7 @@ import Task2 from './components/tasks/Task2'
 import Task3 from './components/tasks/Task3'
 import CostByMonth from './components/tasks/CostByMonth'
 import CostByYear from './components/tasks/CostByYear'
+import CompanyShoesDeliveres from './components/tasks/CompanyShoesDeliveres'
 import DiscountLossesByMonth from './components/tasks/DiscountLossesByMonth'
 import DiscountLossesByYear from './components/tasks/DiscountLossesByYear'
 import ProfitByYear from './components/tasks/ProfitByYear'
@@ -62,6 +63,7 @@ function App() {
                                     <Route path='/task3' element={<Task3 title={titles[2]} />} />
                                     <Route path='/task4' element={<CostByMonth title={titles[3]} />} />
                                     <Route path='/task5' element={<CostByYear title={titles[4]} />} />
+                                    <Route path='/task6' element={<CompanyShoesDeliveres title={titles[5]} />} />
                                     <Route path='/task7' element={<DiscountLossesByMonth title={titles[6]} />} />
                                     <Route path='/task8' element={<DiscountLossesByYear title={titles[7]} />} />
                                     <Route path='/task9' element={<ProfitByMonth title={titles[8]} />} />

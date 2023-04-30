@@ -4,11 +4,12 @@ Parts:
 
 - [x] Create bd which represent tableware business (instagram store rather than
     something bigger)
-- [x] Seed bd (⚠️  needs additinal review  nand some manual mmodifications)
-- [ ] Migrate bd into cloud
-- [ ] Write SQL to suppor business logic
-- [ ] Create server for accessing bd
-- [ ] Create web client
+- [x] Seed bd
+- [x] Migrate bd into cloud
+- [x] Write SQL to suppor business logic
+- [x] Create server for accessing bd
+- [x] Create web client
+- [] Data ingesion
 
 **Note**: We do not use ORM since it does not align with the goal
 of the project. The project is intended to work directly with the

@@ -2,7 +2,6 @@ from flask import Flask, jsonify
 from flask_cors import CORS
 import pyodbc
 
-
 app = Flask(__name__)
 CORS(app, resources={r"/*": {"origins": "http://localhost:3000"}})
 
@@ -33,12 +32,12 @@ def insertValuesInDB():
 
 
 def get_db_connection():
-    server = "thesoleplate.ccxpddhrdedh.us-east-1.rds.amazonaws.com"
-    database = "thesoleplate"
+    server = ""
+    database = ""
     driver = "ODBC Driver 17 for SQL Server"
 
-    username = "tsp"
-    password = "12345678"
+    username = ""
+    password = ""
     connection_string = f"DRIVER={driver};SERVER={server};DATABASE={database};UID={username};PWD={password}"
 
     cnxn = pyodbc.connect(connection_string)
@@ -259,20 +258,36 @@ def get_top_5_popular_products():
 if __name__ == "__main__":
     connection, cursor = get_db_connection()
 
-    # for statement in generateDB().split(';'):
+    # print("\n-------------------------------------------------------------------------------------------------\n")
+
+    # for statement in dropFunctionsInDB().split(';'):
     #     if statement.strip():
     #         try:
     #             cursor.execute(statement)
     #             connection.commit()
     #         except Exception as e:
-    #             print("An error occurred:", e)
+    #             # print("An error occurred:", e)
     #             connection.rollback()
     # connection.commit()
+    print(
+        "\n-------------------------------------------------------------------------------------------------\n"
+    )
+    #
+    for statement in generateDB().split(";"):
+        if statement.strip():
+            try:
+                cursor.execute(statement)
+                connection.commit()
+            except Exception as e:
+                # print("An error occurred:", e)
+                connection.rollback()
+    connection.commit()
+
     #
     #
     #
     #
-    #
+    # print("\n-------------------------------------------------------------------------------------------------\n")
     # for statement in insertValuesInDB().split(';'):
     #     if statement.strip():
     #         try:
@@ -281,27 +296,16 @@ if __name__ == "__main__":
     #         except Exception as e:
     #             print("An error occurred:", e)
     #             connection.rollback()
+    # # connection.commit()
+    # for statement in createFunctionsInDB().split(';'):
+    #     if statement.strip():
+    #         try:
+    #             cursor.execute(statement)
+    #             connection.commit()
+    #         except Exception as e:
+    #             print("An error occurred:", e)
+    #             connection.rollback()
     # connection.commit()
-
-    for statement in dropFunctionsInDB().split(";"):
-        if statement.strip():
-            try:
-                cursor.execute(statement)
-                connection.commit()
-            except Exception as e:
-                print("An error occurred:", e)
-                connection.rollback()
-    connection.commit()
-
-    for statement in createFunctionsInDB().split(";"):
-        if statement.strip():
-            try:
-                cursor.execute(statement)
-                connection.commit()
-            except Exception as e:
-                print("An error occurred:", e)
-                connection.rollback()
-    connection.commit()
     connection.close()
 
     app.run(debug=True)

@@ -1,7 +1,27 @@
+DROP TABLE IF EXISTS Calculation;
+DROP TABLE IF EXISTS Supplies;
+DROP TABLE IF EXISTS OrderDetails;
+DROP TABLE IF EXISTS Orders;
+DROP TABLE IF EXISTS SupplierCompanyBrands;
+DROP TABLE IF EXISTS Suppliers;
+DROP TABLE IF EXISTS SupplierCompany;
+DROP TABLE IF EXISTS Employees;
+DROP TABLE IF EXISTS ProductSize;
+DROP TABLE IF EXISTS ProductMaterial;
+DROP TABLE IF EXISTS Products;
+DROP TABLE IF EXISTS ProductsPriceHistory;
+DROP TABLE IF EXISTS Customers;
+DROP TABLE IF EXISTS Sizes;
+DROP TABLE IF EXISTS Materials;
+DROP TABLE IF EXISTS Brands;
+DROP TABLE IF EXISTS DiscountCards;
+DROP TABLE IF EXISTS StatisticsValues;
+
 DROP FUNCTION GetAverageProductPriceByBrand;
 DROP FUNCTION GetBrandSalesByPartOfYear;
 DROP FUNCTION GetBrandSalesByMonth;
 DROP FUNCTION GetBrandsSalesByYear;
+DROP FUNCTION GetEmployeeOrdersByMonthInYear;
 DROP FUNCTION GetCompanyShoeDeliveries;
 DROP FUNCTION GetCostsByPartOfYear;
 DROP FUNCTION GetCostsByMonth;
