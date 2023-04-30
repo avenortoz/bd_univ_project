@@ -1,8 +1,10 @@
 from flask import Flask, jsonify
+from flask_cors import CORS
 import pyodbc
 
 
 app = Flask(__name__)
+CORS(app, resources={r"/*": {"origins": "http://localhost:3000"}})
 
 
 def readFunctionFromFile(nameFile):
@@ -109,6 +111,7 @@ def get_brand_sales_by_year(year):
     return jsonify(result)
 
 
+# FIX: return empty array
 # Скільки кожна компанія доставляє взуття
 @app.route("/company-shoe-deliveries")
 def get_company_shoe_deliveries():

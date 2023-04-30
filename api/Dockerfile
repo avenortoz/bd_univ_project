@@ -12,7 +12,6 @@ RUN apt-get update -y && \
     apt-get install -y python3.10 python3-pip && \
     apt-get clean && \
     pip3 install -r requirements.txt
-COPY . .
 EXPOSE 5000
 ENV FLASK_APP=shoes_api
 CMD ["flask", "run"]
