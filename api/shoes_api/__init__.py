@@ -5,49 +5,52 @@ import pyodbc
 app = Flask(__name__)
 
 
-
-
 def readFunctionFromFile(nameFile):
-   file_path = nameFile
-   with open(file_path, 'rb') as file:
-       content = file.read()
-   if content.startswith(b'\xef\xbb\xbf'):
-       content = content[3:]
-   with open(file_path, 'wb') as file:
-       file.write(content)
-   with open(file_path, 'r', encoding='utf-8') as file:
-       file_contents = file.read()
-   return file_contents
-
-
+    file_path = nameFile
+    with open(file_path, "rb") as file:
+        content = file.read()
+    if content.startswith(b"\xef\xbb\xbf"):
+        content = content[3:]
+    with open(file_path, "wb") as file:
+        file.write(content)
+    with open(file_path, "r", encoding="utf-8") as file:
+        file_contents = file.read()
+    return file_contents
 
 
 def dropFunctionsInDB():
-   return readFunctionFromFile('sql/drop.sql')
+    return readFunctionFromFile("sql/drop.sql")
+
+
 def createFunctionsInDB():
-   return readFunctionFromFile('sql/function.sql')
+    return readFunctionFromFile("sql/function.sql")
+
+
 def insertValuesInDB():
-   return readFunctionFromFile('sql/fill.sql')
+    return readFunctionFromFile("sql/fill.sql")
 
 
 def get_db_connection():
-   server = '***'
-   database = '*******'
-   driver = 'ODBC Driver 17 for SQL Server'
+    server = "thesoleplate.ccxpddhrdedh.us-east-1.rds.amazonaws.com"
+    database = "thesoleplate"
+    driver = "ODBC Driver 17 for SQL Server"
 
-   username = "***"
-   password = "**********"
-   connection_string = f"DRIVER={driver};SERVER={server};DATABASE={database};UID={username};PWD={password}"
+    username = "tsp"
+    password = "12345678"
+    connection_string = f"DRIVER={driver};SERVER={server};DATABASE={database};UID={username};PWD={password}"
 
-   cnxn = pyodbc.connect(connection_string)
-   cursor = cnxn.cursor()
-   return cnxn, cursor
-
-
+    cnxn = pyodbc.connect(connection_string)
+    cursor = cnxn.cursor()
+    return cnxn, cursor
 
 
 def generateDB():
-   return readFunctionFromFile('sql/database.sql')
+    return readFunctionFromFile("sql/database.sql")
+
+
+@app.route("/")
+def home():
+    return "Hello, world!"
 
 
 # Середня ціна продуктів за брендом
@@ -118,6 +121,8 @@ def get_company_shoe_deliveries():
         result.append({column_names[i]: value for i, value in enumerate(row)})
     connection.close()
     return jsonify(result)
+
+
 # Витрати за місяць, за 3 місяці, за рік - за місяць
 @app.route("/costs-by-month/<int:year>")
 def get_costs_by_month(year):
@@ -197,9 +202,9 @@ def get_profit_by_year():
     result = []
     column_names = [column_name[0] for column_name in cursor.description]
     for row in rows:
-       result.append({column_names[i]: value for i, value in enumerate(row)})
-       connection.close()
-       return jsonify(result)
+        result.append({column_names[i]: value for i, value in enumerate(row)})
+        connection.close()
+        return jsonify(result)
     return jsonify(result)
 
 
@@ -245,55 +250,52 @@ def get_top_5_popular_products():
     return jsonify(result)
 
 
+if __name__ == "__main__":
+    connection, cursor = get_db_connection()
 
-if __name__ == '__main__':
-   connection, cursor = get_db_connection()
+    # for statement in generateDB().split(';'):
+    #     if statement.strip():
+    #         try:
+    #             cursor.execute(statement)
+    #             connection.commit()
+    #         except Exception as e:
+    #             print("An error occurred:", e)
+    #             connection.rollback()
+    # connection.commit()
+    #
+    #
+    #
+    #
+    #
+    # for statement in insertValuesInDB().split(';'):
+    #     if statement.strip():
+    #         try:
+    #             cursor.execute(statement)
+    #             connection.commit()
+    #         except Exception as e:
+    #             print("An error occurred:", e)
+    #             connection.rollback()
+    # connection.commit()
 
-   # for statement in generateDB().split(';'):
-   #     if statement.strip():
-   #         try:
-   #             cursor.execute(statement)
-   #             connection.commit()
-   #         except Exception as e:
-   #             print("An error occurred:", e)
-   #             connection.rollback()
-   # connection.commit()
-   #
-   #
-   #
-   #
-   #
-   # for statement in insertValuesInDB().split(';'):
-   #     if statement.strip():
-   #         try:
-   #             cursor.execute(statement)
-   #             connection.commit()
-   #         except Exception as e:
-   #             print("An error occurred:", e)
-   #             connection.rollback()
-   # connection.commit()
+    for statement in dropFunctionsInDB().split(";"):
+        if statement.strip():
+            try:
+                cursor.execute(statement)
+                connection.commit()
+            except Exception as e:
+                print("An error occurred:", e)
+                connection.rollback()
+    connection.commit()
 
-   for statement in dropFunctionsInDB().split(';'):
-       if statement.strip():
-           try:
-               cursor.execute(statement)
-               connection.commit()
-           except Exception as e:
-               print("An error occurred:", e)
-               connection.rollback()
-   connection.commit()
+    for statement in createFunctionsInDB().split(";"):
+        if statement.strip():
+            try:
+                cursor.execute(statement)
+                connection.commit()
+            except Exception as e:
+                print("An error occurred:", e)
+                connection.rollback()
+    connection.commit()
+    connection.close()
 
-   for statement in createFunctionsInDB().split(';'):
-       if statement.strip():
-           try:
-               cursor.execute(statement)
-               connection.commit()
-           except Exception as e:
-               print("An error occurred:", e)
-               connection.rollback()
-   connection.commit()
-   connection.close()
-
-
-   app.run(debug=True)
-
+    app.run(debug=True)
