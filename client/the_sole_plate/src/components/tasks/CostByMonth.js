@@ -1,26 +1,25 @@
 import { useEffect, useState, useRef } from 'react'
-import { Container, Form, Button } from 'react-bootstrap'
+import { Container, Form} from 'react-bootstrap'
 import Plot from 'react-plotly.js'
 import { serverHost } from '../../api.js'
 import './options.css'
 
-const Task2 = ({title}) => {
+const CostByMonth = ({title}) => {
     const [data, setData] = useState([])
     const [year, setYear] = useState(2020)
-    const [month, setMonth] = useState(1)
     const formRef = useRef(null)
     useEffect(() => {
         const fetchData = async () => {
             try {
                 const response = await fetch(
-                    `${serverHost}/brand-sales-by-part-of-year/${month}/${year}`
+                    `${serverHost}/costs-by-month/${year}`
                 )
                 const tmp_data = await response.json()
                 setData(
                     tmp_data.map((b) => {
                         return {
-                            x: b['BrandName'],
-                            y: b['NumberOfPairsSold']
+                            y: b['Costs'],
+                            x: b['Month']
                         }
                     })
                 )
@@ -31,7 +30,7 @@ const Task2 = ({title}) => {
         }
 
         fetchData()
-    }, [year, month])
+    }, [year])
 
     const drawPlot = () => {
         const tmp_data = [
@@ -49,7 +48,7 @@ const Task2 = ({title}) => {
     }
 
     const layout = {
-        title: `${year}/${month}`,
+        title: `${year}`,
         xaxis: { title: 'Brand' },
         yaxis: { title: 'Number of Sales' },
         plot_bgcolor: '#212529',
@@ -65,9 +64,7 @@ const Task2 = ({title}) => {
         e.preventDefault()
         const form = formRef.current
         const tyear = parseInt(form.year.value)
-        const tmonth = parseInt(form.month.value)
         setYear(tyear)
-        setMonth(tmonth)
     }
     return (
         <div className='task'>
@@ -79,15 +76,6 @@ const Task2 = ({title}) => {
                             type='text'
                             name='year'
                             defaultValue={year}
-                            placeholder='Enter text'
-                        />
-                    </Form.Group>
-                    <Form.Group className='ms-3 me-3'>
-                        <Form.Label>Month:</Form.Label>
-                        <Form.Control
-                            type='text'
-                            name='month'
-                            defaultValue={month}
                             placeholder='Enter text'
                         />
                     </Form.Group>
@@ -106,4 +94,4 @@ const Task2 = ({title}) => {
     )
 }
 
-export default Task2
+export default CostByMonth

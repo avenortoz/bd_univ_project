@@ -182,6 +182,7 @@ def get_discount_losses_by_year():
     return jsonify(result)
 
 
+# FIX: returns several value with the same month
 # Прибуток за місяць, за 3 місяці, за рік - за місяць
 @app.route("/profit-by-month/<int:year>")
 def get_profit_by_month(year):
@@ -196,6 +197,7 @@ def get_profit_by_month(year):
     return jsonify(result)
 
 
+# FIX: returns nothing
 # Прибуток за місяць, за 3 місяці, за рік - за рік
 @app.route("/profit-by-year")
 def get_profit_by_year():
@@ -211,6 +213,7 @@ def get_profit_by_year():
     return jsonify(result)
 
 
+# FIX: returns nothing
 # Прибуток за сезон
 @app.route("/profit-by-season/<int:year>")
 def get_profit_by_season(year):

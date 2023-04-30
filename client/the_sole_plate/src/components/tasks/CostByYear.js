@@ -1,26 +1,27 @@
-import { useEffect, useState } from 'react'
-import { Container } from 'react-bootstrap'
+import { useEffect, useState, useRef } from 'react'
+import { Container, Form, Button } from 'react-bootstrap'
 import Plot from 'react-plotly.js'
 import { serverHost } from '../../api.js'
+import './options.css'
 
-const Task1 = ({title}) => {
-    const [brands, setBrands] = useState([])
+const CostByYear = ({title}) => {
+    const [data, setData] = useState([])
     useEffect(() => {
         const fetchData = async () => {
             try {
                 const response = await fetch(
-                    `${serverHost}/average-product-price-by-brand`
+                    `${serverHost}/costs-by-year`
                 )
-                const data = await response.json()
-                setBrands(
-                    data.map((b) => {
+                const tmp_data = await response.json()
+                setData(
+                    tmp_data.map((b) => {
                         return {
-                            x: b['BrandName'],
-                            y: b['AveragePrice']
+                            x: b['Year'],
+                            y: b['Costs']
                         }
                     })
                 )
-                console.log(data)
+                console.log(tmp_data)
             } catch (error) {
                 console.error(error)
             }
@@ -30,10 +31,10 @@ const Task1 = ({title}) => {
     }, [])
 
     const drawPlot = () => {
-        const data = [
+        const tmp_data = [
             {
-                x: brands.map((b) => b.x),
-                y: brands.map((b) => b.y),
+                x: data.map((b) => b.x),
+                y: data.map((b) => b.y),
                 type: 'bar',
                 marker: {
                     color: '#6b8e23'
@@ -41,7 +42,7 @@ const Task1 = ({title}) => {
             }
         ]
 
-        return <Plot data={data} layout={layout}/>
+        return <Plot data={tmp_data} layout={layout} />
     }
 
     const layout = {
@@ -50,18 +51,20 @@ const Task1 = ({title}) => {
         plot_bgcolor: '#212529',
         paper_bgcolor: '#212529',
         font: {
-          color: '#6b8e23'
+            color: '#6b8e23'
         },
         width: 1200,
         height: 800
-        
     }
+
     return (
-        <div style={{ textAlign: 'center' }}>
-            <h2>{title}</h2>
-            <Container>{drawPlot()}</Container>
+        <div className='task'>
+            <div style={{ textAlign: 'center' }}>
+                <h2>{title}</h2>
+                <Container>{drawPlot()}</Container>
+            </div>
         </div>
     )
 }
 
-export default Task1
+export default CostByYear

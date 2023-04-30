@@ -6,7 +6,7 @@
 
 .sidebar__item:hover {
     border-color: #ff9933;
-    color: #ff9933;
+    color: #ff9933 !important;
 }
 
 .sidebar__item a {
@@ -20,7 +20,6 @@
 .active-sidebar-link {
     color: black !important;
     background-color: #6b8e23;
-    border-radius: 5px;
 }
 
 .active-sidebar-link a {
