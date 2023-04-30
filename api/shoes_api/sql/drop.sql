@@ -15,6 +15,7 @@ DROP TABLE IF EXISTS Sizes;
 DROP TABLE IF EXISTS Materials;
 DROP TABLE IF EXISTS Brands;
 DROP TABLE IF EXISTS DiscountCards;
+DROP TABLE IF EXISTS StatisticsValues;
 
 DROP FUNCTION GetAverageProductPriceByBrand;
 DROP FUNCTION GetBrandSalesByPartOfYear;
