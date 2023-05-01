@@ -462,3 +462,18 @@ FROM Products p
          JOIN OrderDetails od ON p.ProductID = od.ProductID
 GROUP BY p.Name
 ORDER BY TotalSold DESC;
+
+CREATE FUNCTION GetCustomersBySexM()
+   RETURNS TABLE AS
+RETURN
+SELECT *
+FROM Customers
+WHERE Sex = 'm';
+
+CREATE FUNCTION GetCustomersBySexW()
+   RETURNS TABLE AS
+RETURN
+SELECT *
+FROM Customers
+WHERE Sex = 'w';
+

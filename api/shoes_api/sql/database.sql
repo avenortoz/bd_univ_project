@@ -54,7 +54,6 @@ CREATE TABLE Products (
     Name VARCHAR(100),
     BrandID INT REFERENCES Brands(BrandID),
     Sex VARCHAR(10),
-    ProductSize VARCHAR(50),
     Color VARCHAR(50),
     Price MONEY,
     Description TEXT,
@@ -75,8 +74,9 @@ CREATE TABLE ProductMaterial (
     CreateDate DATE DEFAULT GETDATE(),
     UpdateDate DATE DEFAULT GETDATE()
 );
+
 CREATE TABLE StatisticsValues (
-    StatisticsID INT PRIMARY KEY,
+    StatisticsID INT  IDENTITY(1,1) PRIMARY KEY ,
     Sex VARCHAR(50),
     Brand  VARCHAR(100),
     Category VARCHAR(250),
@@ -84,6 +84,8 @@ CREATE TABLE StatisticsValues (
     CreateDate DATE DEFAULT GETDATE(),
     UpdateDate DATE DEFAULT GETDATE()
 );
+
+
 
 CREATE TABLE ProductSize (
     ProductID INT,
@@ -175,7 +177,9 @@ CREATE TABLE Supplies (
 
 Create Table Calculation(
     CalculationID INT primary key,
-    Costs money,
+    CostsSupplies money,
+    CostsAdditional money,
+    CostsSalary money,
     Income money,
     Profit money,
     DATE DATE DEFAULT getDate()

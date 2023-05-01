@@ -50,10 +50,10 @@ tables = [
     ("SupplierCompany", 100),
     ("Suppliers", 100),
     ("SupplierCompanyBrands", 100),
-    ("Orders", 500),
+    ("Orders", 1000),
     ("OrderDetails", 500),
-    ("Supplies", 100),
-    ("Calculation", 100),
+    ("Supplies", 200),
+    ("Calculation", 500),
 ]
 
 
@@ -202,7 +202,6 @@ def generate_data(table_name):
             ),
             IntegerNumberGenerator(start=1, end=50),  # BrandID
             ChoiceGenerator(["male", "female"]),
-            IntegerNumberGenerator(start=1, end=100),
             ChoiceGenerator(
                 [
                     "red", "orange", "yellow",
@@ -334,7 +333,9 @@ def generate_data(table_name):
         generators = [
             AutoIncermentGenerator(),
             FloatNumberGenerator(start=1.0, end=10000.0, precision=2),
-            FloatNumberGenerator(start=1.0, end=10000.0, precision=2),
+            FloatNumberGenerator(start=1.0, end=1.0, precision=2),
+            FloatNumberGenerator(start=1.0, end=3000.0, precision=2),
+            FloatNumberGenerator(start=1.0, end=5000.0, precision=2),
             FloatNumberGenerator(start=1.0, end=10000.0, precision=2),
             DateGenerator(start_date, end_date),
         ]

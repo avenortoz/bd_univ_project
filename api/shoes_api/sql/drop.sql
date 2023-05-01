@@ -17,6 +17,8 @@ DROP TABLE IF EXISTS Brands;
 DROP TABLE IF EXISTS DiscountCards;
 DROP TABLE IF EXISTS StatisticsValues;
 
+DROP FUNCTION GetCustomersBySexW;
+DROP FUNCTION GetCustomersBySexM;
 DROP FUNCTION GetAverageProductPriceByBrand;
 DROP FUNCTION GetBrandSalesByPartOfYear;
 DROP FUNCTION GetBrandSalesByMonth;

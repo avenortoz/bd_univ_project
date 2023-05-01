@@ -1,9 +1,11 @@
 from flask import Flask, jsonify
-from flask_cors import CORS
+# from flask_cors import CORS
 import pyodbc
 
 app = Flask(__name__)
-CORS(app, resources={r"/*": {"origins": "http://localhost:3000"}})
+
+
+# CORS(app, resources={r"/*": {"origins": "http://localhost:3000"}})
 
 
 def readFunctionFromFile(nameFile):
@@ -32,9 +34,9 @@ def insertValuesInDB():
 
 
 def get_db_connection():
-    server = ""
-    database = ""
-    driver = "ODBC Driver 17 for SQL Server"
+    server = ''
+    database = ''
+    driver = 'ODBC Driver 17 for SQL Server'
 
     username = ""
     password = ""
@@ -208,11 +210,9 @@ def get_profit_by_year():
     for row in rows:
         result.append({column_names[i]: value for i, value in enumerate(row)})
         connection.close()
-        return jsonify(result)
-    return jsonify(result)
+    return jsonify(rows)
 
 
-# FIX: returns nothing
 # Прибуток за сезон
 @app.route("/profit-by-season/<int:year>")
 def get_profit_by_season(year):
@@ -255,36 +255,375 @@ def get_top_5_popular_products():
     return jsonify(result)
 
 
+# NEW______________________________________________________________________________________
+
+@app.route("/costs-by-part-of-year/<int:year>")
+def get_costs_by_part_of_year(year):
+    connection, cursor = get_db_connection()
+    cursor.execute("SELECT * FROM GetCostsByPartOfYear(?)", (year,))
+    rows = cursor.fetchall()
+    result = []
+    column_names = [column_name[0] for column_name in cursor.description]
+    for row in rows:
+        result.append({column_names[i]: value for i, value in enumerate(row)})
+    connection.close()
+    return jsonify(result)
+
+
+@app.route("/discount-losses-by-part-of-year/<int:year>")
+def get_discount_losses_by_part_of_year(year):
+    connection, cursor = get_db_connection()
+    cursor.execute("SELECT * FROM GetDiscountLossesByPartOfYear(?)", (year,))
+    rows = cursor.fetchall()
+    result = []
+    column_names = [column_name[0] for column_name in cursor.description]
+    for row in rows:
+        result.append({column_names[i]: value for i, value in enumerate(row)})
+    connection.close()
+    return jsonify(result)
+
+
+@app.route("/income-by-year-and-seasons/<int:year>")
+def get_income_by_year_and_seasons(year):
+    connection, cursor = get_db_connection()
+    cursor.execute("SELECT * FROM GetIncomeByYearAndSeasons(?)", (year,))
+    rows = cursor.fetchall()
+    result = []
+    column_names = [column_name[0] for column_name in cursor.description]
+    for row in rows:
+        result.append({column_names[i]: value for i, value in enumerate(row)})
+    connection.close()
+    return jsonify(result)
+
+
+@app.route("/income-by-every-month/<int:year>")
+def get_income_by_every_month(year):
+    connection, cursor = get_db_connection()
+    cursor.execute("SELECT * FROM GetIncomeByEveryMonth(?)", (year,))
+    rows = cursor.fetchall()
+    result = []
+    column_names = [column_name[0] for column_name in cursor.description]
+    for row in rows:
+        result.append({column_names[i]: value for i, value in enumerate(row)})
+    connection.close()
+    return jsonify(result)
+
+
+@app.route("/income-by-year")
+def get_income_by_year():
+    connection, cursor = get_db_connection()
+    cursor.execute("SELECT * FROM GetIncomeByYear()")
+    rows = cursor.fetchall()
+    result = []
+    column_names = [column_name[0] for column_name in cursor.description]
+    for row in rows:
+        result.append({column_names[i]: value for i, value in enumerate(row)})
+    connection.close()
+    return jsonify(result)
+
+
+@app.route("/job-title-and-salary")
+def get_job_title_and_salary():
+    connection, cursor = get_db_connection()
+    cursor.execute("SELECT * FROM GetJobTitleAndSalary()")
+    rows = cursor.fetchall()
+    result = []
+    column_names = [column_name[0] for column_name in cursor.description]
+    for row in rows:
+        result.append({column_names[i]: value for i, value in enumerate(row)})
+    connection.close()
+    return jsonify(result)
+
+
+@app.route("/new-customers-by-month-in-year/<int:year>")
+def get_new_customers_by_month_in_year(year):
+    connection, cursor = get_db_connection()
+    cursor.execute("SELECT * FROM GetNewCustomersByMonthInYear(?)", (year,))
+    rows = cursor.fetchall()
+    result = []
+    column_names = [column_name[0] for column_name in cursor.description]
+    for row in rows:
+        result.append({column_names[i]: value for i, value in enumerate(row)})
+    connection.close()
+    return jsonify(result)
+
+
+@app.route("/new-customers-by-year")
+def get_new_customers_by_year():
+    connection, cursor = get_db_connection()
+    cursor.execute("SELECT * FROM GetNewCustomersByYear()")
+    rows = cursor.fetchall()
+    result = []
+    column_names = [column_name[0] for column_name in cursor.description]
+    for row in rows:
+        result.append({column_names[i]: value for i, value in enumerate(row)})
+    connection.close()
+    return jsonify(result)
+
+
+@app.route("/new-customers-by-season/<int:year>")
+def get_new_customers_by_season(year):
+    connection, cursor = get_db_connection()
+    cursor.execute("SELECT * FROM GetNewCustomersBySeason(?)", (year,))
+    rows = cursor.fetchall()
+    result = []
+    column_names = [column_name[0] for column_name in cursor.description]
+    for row in rows:
+        result.append({column_names[i]: value for i, value in enumerate(row)})
+    connection.close()
+    return jsonify(result)
+
+
+@app.route("/employee-orders-by-month-in-year/<int:employee_id>/<int:year>")
+def get_employee_orders_by_month_in_year(employee_id, year):
+    connection, cursor = get_db_connection()
+    cursor.execute("SELECT * FROM GetEmployeeOrdersByMonthInYear(?, ?)", (employee_id, year))
+    rows = cursor.fetchall()
+    result = []
+    column_names = [column_name[0] for column_name in cursor.description]
+    for row in rows:
+        result.append({column_names[i]: value for i, value in enumerate(row)})
+    connection.close()
+    return jsonify(result)
+
+
+@app.route("/employee-orders-by-seasons/<int:employee_id>/<int:year>")
+def get_employee_orders_by_seasons(employee_id, year):
+    connection, cursor = get_db_connection()
+    cursor.execute("SELECT * FROM GetEmployeeOrdersBySeasons(?, ?)", (employee_id, year))
+    rows = cursor.fetchall()
+    result = []
+    column_names = [column_name[0] for column_name in cursor.description]
+    for row in rows:
+        result.append({column_names[i]: value for i, value in enumerate(row)})
+    connection.close()
+    return jsonify(result)
+
+
+@app.route("/employee-orders-by-all-years/<int:employee_id>")
+def get_employee_orders_by_all_years(employee_id):
+    connection, cursor = get_db_connection()
+    cursor.execute("SELECT * FROM GetEmployeeOrdersByAllYears(?)", (employee_id,))
+    rows = cursor.fetchall()
+    result = []
+    column_names = [column_name[0] for column_name in cursor.description]
+    for row in rows:
+        result.append({column_names[i]: value for i, value in enumerate(row)})
+    connection.close()
+    return jsonify(result)
+
+
+@app.route("/pairs-by-price-range/<float:min_price>/<float:max_price>")
+def get_pairs_by_price_range(min_price, max_price):
+    connection, cursor = get_db_connection()
+    cursor.execute("SELECT * FROM GetPairsByPriceRange(?, ?)", (min_price, max_price))
+    rows = cursor.fetchall()
+    result = []
+    column_names = [column_name[0] for column_name in cursor.description]
+    for row in rows:
+        result.append({column_names[i]: value for i, value in enumerate(row)})
+    connection.close()
+    return jsonify(result)
+
+
+# ----------------------
+# Existing imports and routes...
+
+@app.route("/purchased-shoe-sizes")
+def get_purchased_shoe_sizes():
+    connection, cursor = get_db_connection()
+    cursor.execute("SELECT * FROM GetPurchasedShoeSizes()")
+    rows = cursor.fetchall()
+    result = []
+    column_names = [column_name[0] for column_name in cursor.description]
+    for row in rows:
+        result.append({column_names[i]: value for i, value in enumerate(row)})
+    connection.close()
+    return jsonify(result)
+
+
+@app.route("/sales-percentage-by-material")
+def get_sales_percentage_by_material():
+    connection, cursor = get_db_connection()
+    cursor.execute("SELECT * FROM GetSalesPercentageByMaterial()")
+    rows = cursor.fetchall()
+    result = []
+    column_names = [column_name[0] for column_name in cursor.description]
+    for row in rows:
+        result.append({column_names[i]: value for i, value in enumerate(row)})
+    connection.close()
+    return jsonify(result)
+
+
+@app.route("/shoe-type-percentage")
+def get_shoe_type_percentage():
+    connection, cursor = get_db_connection()
+    cursor.execute("SELECT * FROM GetShoeTypePercentage()")
+    rows = cursor.fetchall()
+    result = []
+    column_names = [column_name[0] for column_name in cursor.description]
+    for row in rows:
+        result.append({column_names[i]: value for i, value in enumerate(row)})
+    connection.close()
+    return jsonify(result)
+
+
+@app.route("/shoe-type-percentage-by-brand")
+def get_shoe_type_percentage_by_brand():
+    connection, cursor = get_db_connection()
+    cursor.execute("SELECT * FROM GetShoeTypePercentageByBrand()")
+    rows = cursor.fetchall()
+    result = []
+    column_names = [column_name[0] for column_name in cursor.description]
+    for row in rows:
+        result.append({column_names[i]: value for i, value in enumerate(row)})
+    connection.close()
+    return jsonify(result)
+
+
+@app.route("/shoe-type-percentage-by-company")
+def get_shoe_type_percentage_by_company():
+    connection, cursor = get_db_connection()
+    cursor.execute("SELECT * FROM GetShoeTypePercentageByCompany()")
+    rows = cursor.fetchall()
+    result = []
+    column_names = [column_name[0] for column_name in cursor.description]
+    for row in rows:
+        result.append({column_names[i]: value for i, value in enumerate(row)})
+    connection.close()
+    return jsonify(result)
+
+
+@app.route("/customers-by-sex")
+def get_customers_by_sex():
+    connection, cursor = get_db_connection()
+    cursor.execute("SELECT * FROM GetCustomersBySex()")
+    rows = cursor.fetchall()
+    result = []
+    column_names = [column_name[0] for column_name in cursor.description]
+    for row in rows:
+        result.append({column_names[i]: value for i, value in enumerate(row)})
+    connection.close()
+    return jsonify(result)
+
+
+@app.route("/monthly-sales-by-sex")
+def get_monthly_sales_by_sex():
+    connection, cursor = get_db_connection()
+    cursor.execute("SELECT * FROM GetMonthlySalesBySex()")
+    rows = cursor.fetchall()
+    result = []
+    column_names = [column_name[0] for column_name in cursor.description]
+    for row in rows:
+        result.append({column_names[i]: value for i, value in enumerate(row)})
+    connection.close()
+    return jsonify(result)
+
+
+@app.route("/supplier-pairs-percentage")
+def get_supplier_pairs_percentage():
+    connection, cursor = get_db_connection()
+    cursor.execute("SELECT * FROM GetSupplierPairsPercentage()")
+    rows = cursor.fetchall()
+    result = []
+    column_names = [column_name[0] for column_name in cursor.description]
+    for row in rows:
+        result.append({column_names[i]: value for i, value in enumerate(row)})
+    connection.close()
+    return jsonify(result)
+
+
+@app.route("/shoe-type-sales-by-year")
+def get_shoe_type_sales_by_year():
+    connection, cursor = get_db_connection()
+    cursor.execute("SELECT * FROM GetShoeTypeSalesByYear()")
+    rows = cursor.fetchall()
+    result = []
+    column_names = [column_name[0] for column_name in cursor.description]
+    for row in rows:
+        result.append({column_names[i]: value for i, value in enumerate(row)})
+    connection.close()
+    return jsonify(result)
+
+
+@app.route("/shoe-type-sales-by-month/<int:year>")
+def get_shoe_type_sales_by_month(year):
+    connection, cursor = get_db_connection()
+    cursor.execute(f"SELECT * FROM GetShoeTypeSalesByMonth({year})")
+    rows = cursor.fetchall()
+    result = []
+    column_names = [column_name[0] for column_name in cursor.description]
+    for row in rows:
+        result.append({column_names[i]: value for i, value in enumerate(row)})
+    connection.close()
+    return jsonify(result)
+
+
+@app.route("/shoe-type-sales-by-season/<int:year>")
+def get_shoe_type_sales_by_season(year):
+    connection, cursor = get_db_connection()
+    cursor.execute(f"SELECT * FROM GetShoeTypeSalesBySeason({year})")
+    rows = cursor.fetchall()
+    result = []
+    column_names = [column_name[0] for column_name in cursor.description]
+    for row in rows:
+        result.append({column_names[i]: value for i, value in enumerate(row)})
+    connection.close()
+    return jsonify(result)
+
+@app.route("/customers/sex/m")
+def get_customers_by_sex_m():
+    connection, cursor = get_db_connection()
+    cursor.execute("SELECT * FROM GetCustomersBySexM()")
+    rows = cursor.fetchall()
+    result = []
+    column_names = [column_name[0] for column_name in cursor.description]
+    for row in rows:
+        result.append({column_names[i]: value for i, value in enumerate(row)})
+    connection.close()
+    return jsonify(result)
+@app.route("/customers/sex/w")
+def get_customers_by_sex_w():
+    connection, cursor = get_db_connection()
+    cursor.execute("SELECT * FROM GetCustomersBySexW()")
+    rows = cursor.fetchall()
+    result = []
+    column_names = [column_name[0] for column_name in cursor.description]
+    for row in rows:
+        result.append({column_names[i]: value for i, value in enumerate(row)})
+    connection.close()
+    return jsonify(result)
+
 if __name__ == "__main__":
     connection, cursor = get_db_connection()
 
     # print("\n-------------------------------------------------------------------------------------------------\n")
-
+    #
     # for statement in dropFunctionsInDB().split(';'):
     #     if statement.strip():
     #         try:
     #             cursor.execute(statement)
     #             connection.commit()
     #         except Exception as e:
-    #             # print("An error occurred:", e)
+    #             print("An error occurred:", e)
     #             connection.rollback()
     # connection.commit()
-    print(
-        "\n-------------------------------------------------------------------------------------------------\n"
-    )
-    #
-    for statement in generateDB().split(";"):
-        if statement.strip():
-            try:
-                cursor.execute(statement)
-                connection.commit()
-            except Exception as e:
-                # print("An error occurred:", e)
-                connection.rollback()
-    connection.commit()
+    # print(
+    #     "\n-------------------------------------------------------------------------------------------------\n"
+    # )
+    # #
+    # for statement in generateDB().split(";"):
+    #     if statement.strip():
+    #         try:
+    #             cursor.execute(statement)
+    #             connection.commit()
+    #         except Exception as e:
+    #             print("An error occurred:", e)
+    #             connection.rollback()
+    # connection.commit()
 
-    #
-    #
+    # #
+    # #
     #
     #
     # print("\n-------------------------------------------------------------------------------------------------\n")
@@ -296,16 +635,16 @@ if __name__ == "__main__":
     #         except Exception as e:
     #             print("An error occurred:", e)
     #             connection.rollback()
-    # # connection.commit()
-    # for statement in createFunctionsInDB().split(';'):
-    #     if statement.strip():
-    #         try:
-    #             cursor.execute(statement)
-    #             connection.commit()
-    #         except Exception as e:
-    #             print("An error occurred:", e)
-    #             connection.rollback()
     # connection.commit()
+    for statement in createFunctionsInDB().split(';'):
+        if statement.strip():
+            try:
+                cursor.execute(statement)
+                connection.commit()
+            except Exception as e:
+                print("An error occurred:", e)
+                connection.rollback()
+    connection.commit()
     connection.close()
 
     app.run(debug=True)
