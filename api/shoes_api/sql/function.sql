@@ -241,27 +241,29 @@ FROM Orders o
          JOIN OrderDetails od ON o.OrderID = od.OrderID
 WHERE od.Price BETWEEN @MinPrice AND @MaxPrice;
 
-
 CREATE FUNCTION GetProfitBySeason(@Year INT)
     RETURNS TABLE AS
 RETURN
-SELECT (Income - Costs) AS Profit,
-       CASE
-           WHEN MONTH (CreateDate) BETWEEN 1 AND 3 THEN 1
-           WHEN MONTH(CreateDate) BETWEEN 4 AND 6 THEN 2
-           WHEN MONTH(CreateDate) BETWEEN 7 AND 9 THEN 3
-           WHEN MONTH(CreateDate) BETWEEN 10 AND 12 THEN 4
-END
-AS Season
+SELECT (Income - Costs) AS Profit, Season
 FROM (
     SELECT
         SUM(o.TotalPrice) AS Income,
         SUM(s.TotalSum) AS Costs,
-        s.CreateDate
+        CASE
+            WHEN MONTH(o.CreateDate) BETWEEN 1 AND 3 THEN 1
+            WHEN MONTH(o.CreateDate) BETWEEN 4 AND 6 THEN 2
+            WHEN MONTH(o.CreateDate) BETWEEN 7 AND 9 THEN 3
+            WHEN MONTH(o.CreateDate) BETWEEN 10 AND 12 THEN 4
+        END AS Season
     FROM Orders o
-    JOIN Supplies s ON MONTH(s.DateOfDelivery) BETWEEN MONTH(s.CreateDate) AND (MONTH(s.CreateDate) + 2) AND YEAR(s.DateOfDelivery) = @Year
-    WHERE YEAR(s.CreateDate) = @Year
-    GROUP BY s.CreateDate
+    JOIN Supplies s ON MONTH(s.DateOfDelivery) BETWEEN MONTH(o.CreateDate) AND (MONTH(o.CreateDate) + 2) AND YEAR(s.DateOfDelivery) = @Year
+    WHERE YEAR(o.CreateDate) = @Year
+    GROUP BY CASE
+            WHEN MONTH(o.CreateDate) BETWEEN 1 AND 3 THEN 1
+            WHEN MONTH(o.CreateDate) BETWEEN 4 AND 6 THEN 2
+            WHEN MONTH(o.CreateDate) BETWEEN 7 AND 9 THEN 3
+            WHEN MONTH(o.CreateDate) BETWEEN 10 AND 12 THEN 4
+        END
 ) AS Subquery;
 
 
@@ -269,27 +271,29 @@ FROM (
 CREATE FUNCTION GetProfitByMonth(@Year INT)
     RETURNS TABLE AS
 RETURN
-SELECT (Income - Costs) AS Profit, MONTH (CreateDate) AS Month
+SELECT SUM(Income - Costs) AS Profit, Month
 FROM (
     SELECT
-    SUM (o.TotalPrice) AS Income, SUM (s.TotalSum) AS Costs, o.CreateDate
+        SUM(o.TotalPrice) AS Income, SUM(s.TotalSum) AS Costs, MONTH(o.CreateDate) AS Month
     FROM Orders o
-    JOIN Supplies s ON MONTH (s.DateOfDelivery) = MONTH (o.CreateDate) AND YEAR (s.DateOfDelivery) = @Year
-    WHERE YEAR (o.CreateDate) = @Year
-    GROUP BY o.CreateDate
-    ) AS Subquery;
+    JOIN Supplies s ON MONTH(s.DateOfDelivery) = MONTH(o.CreateDate) AND YEAR(s.DateOfDelivery) = @Year
+    WHERE YEAR(o.CreateDate) = @Year
+    GROUP BY MONTH(o.CreateDate)
+) AS Subquery
+GROUP BY Month;
 
 CREATE FUNCTION GetProfitByYear()
     RETURNS TABLE AS
 RETURN
-SELECT (Income - Costs) AS Profit, YEAR (CreateDate) AS Year
+SELECT DISTINCT (Income - Costs) AS Profit, Year
 FROM (
     SELECT
-    SUM (o.TotalPrice) AS Income, SUM (s.TotalSum) AS Costs, o.CreateDate
+        SUM(o.TotalPrice) OVER (PARTITION BY YEAR(o.CreateDate)) AS Income,
+        SUM(s.TotalSum) OVER (PARTITION BY YEAR(o.CreateDate)) AS Costs,
+        YEAR(o.CreateDate) AS Year
     FROM Orders o
-    JOIN Supplies s ON YEAR (s.DateOfDelivery) = YEAR (o.CreateDate)
-    GROUP BY YEAR (o.CreateDate)
-    ) AS Subquery;
+    JOIN Supplies s ON YEAR(s.DateOfDelivery) = YEAR(o.CreateDate)
+) AS Subquery;
 
 CREATE FUNCTION GetPurchasedShoeSizes()
     RETURNS TABLE AS
