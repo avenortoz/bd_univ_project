@@ -19,7 +19,7 @@ const ProfitByMonth = ({ title }) => {
                     tmp_data.map((b) => {
                         return {
                             y: b['Profit'],
-                            x: b['Month']
+                            x: b['Season']
                         }
                     })
                 )
