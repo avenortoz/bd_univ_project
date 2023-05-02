@@ -69,8 +69,8 @@ const GeneralTaskOneParameter = ({
 
         const d = [
             {
-                x: brands.map((b) => b.x).sort(),
-                y: brands.map((b) => b.y).sort(),
+                x: brands.map((b) => b.x),
+                y: brands.map((b) => b.y),
                 type: 'scatter',
                 marker: {
                     color: color

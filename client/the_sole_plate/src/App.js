@@ -161,7 +161,7 @@ function App() {
                                                 title={titles[9]}
                                                 api={'profit-by-year'}
                                                 xname={'Year'}
-                                                yname={'Profi'}
+                                                yname={'Profit'}
                                             />
                                         }
                                     />
