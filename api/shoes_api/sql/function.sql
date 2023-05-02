@@ -162,24 +162,30 @@ GROUP BY MONTH (CreateDate);
 
 
 CREATE FUNCTION GetNewCustomersBySeason(@Year INT)
-    RETURNS TABLE AS
+RETURNS TABLE AS
 RETURN
-SELECT @Year AS Year,
+SELECT
+    @Year AS Year,
     CASE
         WHEN MONTH(CreateDate) BETWEEN 1 AND 3 THEN 1
         WHEN MONTH(CreateDate) BETWEEN 4 AND 6 THEN 2
         WHEN MONTH(CreateDate) BETWEEN 7 AND 9 THEN 3
         WHEN MONTH(CreateDate) BETWEEN 10 AND 12 THEN 4
-END
-AS Season,
+    END AS Season,
     COUNT(*) AS NewCustomers
-FROM Customers
-GROUP BY YEAR(CreateDate), CASE
-    WHEN MONTH(CreateDate) BETWEEN 1 AND 3 THEN 1
-    WHEN MONTH(CreateDate) BETWEEN 4 AND 6 THEN 2
-    WHEN MONTH(CreateDate) BETWEEN 7 AND 9 THEN 3
-    WHEN MONTH(CreateDate) BETWEEN 10 AND 12 THEN 4
-END;
+FROM
+    Customers
+WHERE
+    YEAR(CreateDate) = @Year
+GROUP BY
+    YEAR(CreateDate),
+    CASE
+        WHEN MONTH(CreateDate) BETWEEN 1 AND 3 THEN 1
+        WHEN MONTH(CreateDate) BETWEEN 4 AND 6 THEN 2
+        WHEN MONTH(CreateDate) BETWEEN 7 AND 9 THEN 3
+        WHEN MONTH(CreateDate) BETWEEN 10 AND 12 THEN 4
+    END;
+
 
 CREATE FUNCTION GetNewCustomersByYear()
     RETURNS TABLE AS
@@ -467,13 +473,13 @@ CREATE FUNCTION GetCustomersBySexM()
    RETURNS TABLE AS
 RETURN
 SELECT *
-FROM Customers
+FROM StatisticsValues
 WHERE Sex = 'm';
 
 CREATE FUNCTION GetCustomersBySexW()
    RETURNS TABLE AS
 RETURN
 SELECT *
-FROM Customers
+FROM StatisticsValues
 WHERE Sex = 'w';
 

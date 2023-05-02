@@ -33,19 +33,19 @@ def insertValuesInDB():
     return readFunctionFromFile("sql/fill.sql")
 
 
+
 def get_db_connection():
-    server = ''
-    database = ''
-    driver = 'ODBC Driver 17 for SQL Server'
+   server = ''
+   database = ''
+   driver = 'ODBC Driver 17 for SQL Server'
 
-    username = ""
-    password = ""
-    connection_string = f"DRIVER={driver};SERVER={server};DATABASE={database};UID={username};PWD={password}"
+   username = ""
+   password = ""
+   connection_string = f"DRIVER={driver};SERVER={server};DATABASE={database};UID={username};PWD={password}"
 
-    cnxn = pyodbc.connect(connection_string)
-    cursor = cnxn.cursor()
-    return cnxn, cursor
-
+   cnxn = pyodbc.connect(connection_string)
+   cursor = cnxn.cursor()
+   return cnxn, cursor
 
 def generateDB():
     return readFunctionFromFile("sql/database.sql")
@@ -413,7 +413,7 @@ def get_employee_orders_by_all_years(employee_id):
     return jsonify(result)
 
 
-@app.route("/pairs-by-price-range/<float:min_price>/<float:max_price>")
+@app.route("/pairs-by-price-range/<int:min_price>/<int:max_price>")
 def get_pairs_by_price_range(min_price, max_price):
     connection, cursor = get_db_connection()
     cursor.execute("SELECT * FROM GetPairsByPriceRange(?, ?)", (min_price, max_price))
@@ -425,9 +425,6 @@ def get_pairs_by_price_range(min_price, max_price):
     connection.close()
     return jsonify(result)
 
-
-# ----------------------
-# Existing imports and routes...
 
 @app.route("/purchased-shoe-sizes")
 def get_purchased_shoe_sizes():
@@ -546,19 +543,6 @@ def get_shoe_type_sales_by_year():
     return jsonify(result)
 
 
-@app.route("/shoe-type-sales-by-month/<int:year>")
-def get_shoe_type_sales_by_month(year):
-    connection, cursor = get_db_connection()
-    cursor.execute(f"SELECT * FROM GetShoeTypeSalesByMonth({year})")
-    rows = cursor.fetchall()
-    result = []
-    column_names = [column_name[0] for column_name in cursor.description]
-    for row in rows:
-        result.append({column_names[i]: value for i, value in enumerate(row)})
-    connection.close()
-    return jsonify(result)
-
-
 @app.route("/shoe-type-sales-by-season/<int:year>")
 def get_shoe_type_sales_by_season(year):
     connection, cursor = get_db_connection()
@@ -636,15 +620,15 @@ if __name__ == "__main__":
     #             print("An error occurred:", e)
     #             connection.rollback()
     # connection.commit()
-    for statement in createFunctionsInDB().split(';'):
-        if statement.strip():
-            try:
-                cursor.execute(statement)
-                connection.commit()
-            except Exception as e:
-                print("An error occurred:", e)
-                connection.rollback()
-    connection.commit()
+    # for statement in createFunctionsInDB().split(';'):
+    #     if statement.strip():
+    #         try:
+    #             cursor.execute(statement)
+    #             connection.commit()
+    #         except Exception as e:
+    #             print("An error occurred:", e)
+    #             connection.rollback()
+    # connection.commit()
     connection.close()
 
     app.run(debug=True)
